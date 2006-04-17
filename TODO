@@ -1,0 +1,4 @@
+
+* we should lock a lockfile to prevent multiple instances overwriting
+  each others files (important for SVG/PNG output)
+* stop the file leaks (when deleting and using preview)

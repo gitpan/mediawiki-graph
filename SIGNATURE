@@ -1,0 +1,38 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.42.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+
+SHA1 30ceba8f4e2d6b3906dbd719d85b687c9290e690 .htaccess
+SHA1 46c9a7ec0bdc4b2f2f260dd379f741a68e9e4632 CHANGES
+SHA1 02154445bc9831e791c35050f1a018ed99030016 LICENSE
+SHA1 37e256cf87eaf67395be959920d59b264c620d17 MANIFEST
+SHA1 7d943e3eb8bfdf1a5170eff8d89689fe8380cbc0 META.yml
+SHA1 75fa57d46aadda06c75584d6064d859327ef182b Makefile.PL
+SHA1 185998d88c79f77a24de32f8caee4801fa052fb8 README
+SHA1 446061086574acf56e51317119d43f9720d2654c TODO
+SHA1 7fa022d6f52ed0c78bd36f865317d2d7dc5a14b1 extensions/Graph.php
+SHA1 d8de8975c45472fd2e094b502c1e7842b0516f47 graph.cfg.sample
+SHA1 3d8bedb53843fca5bf9e461630e8744ca794bc9c graphcnv
+SHA1 975dc878fc3b1fc2d5034894d230b4646c6f4be6 t/00_basic.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+
+iQEVAwUBREPdHHcLPEOTuEwVAQH9XAf+M3LqQ2LPTD3TVXXkHqkekB53GXADKkhq
+fgtTQwIeb2NPfWkLgFITw+CAxYjUVi7e3DuXTOrRS3Cxv10rJxoqRBR7ufvSMaMn
+4jZeZhNpmx/KB50AWRFxyaeCLXBr451Yy3BS/3KrU3NKX33IyzRCf1JF5cYTsCwK
+7JrLa2/XudAF4Qy/9wF/MNeFMVr2bChe24KjZHy1Z4stexhRcgOx9FjMvedfTwPE
+lOF1sOZbM5DE99Ob/59ub4+Go06SFaLgNMqp3YqfVrL+7UxQ874tuPPrHpCL5rL3
+z3yrGagQuYNMBrm1+FtxwCe8JHE6535aZCdhyQq8bxGWDwWYHO04BQ==
+=5fqU
+-----END PGP SIGNATURE-----

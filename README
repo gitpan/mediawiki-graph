@@ -1,0 +1,287 @@
+=pod
+
+To better view this file, use:
+
+	perldoc README
+
+=head1 graphcnv
+
+Take textual graph descriptions and turn them into nice drawings.
+
+This package is intended to integrate Graph::Easy into Wikimedia, the software
+behind popular wikis like http://en.wikipedia.org/.
+
+For instance this input:
+
+	[ Bonn ] -> [ Berlin ]
+	[ Berlin -> [ Frankfurt ] { border: 1px dotted black; }
+	[ Frankfurt ] -> [ Dresden ]
+	[ Berlin ] -> [ Potsdam ]
+	[ Potsdam ] => [ Cottbus ]
+
+would be rendered in ASCII as:
+
+	+------+     +--------+      .............     +---------+
+	| Bonn | --> | Berlin |  --> : Frankfurt : --> | Dresden |
+	+------+     +--------+      .............     +---------+
+	               |
+	               |
+	               v
+	             +---------+     +---------+
+	             | Potsdam | ==> | Cottbus |
+	             +---------+     +---------+
+
+The HTML, SVG or PNG output would look similiar, except be more pretty :o)
+
+This extension can output either inline "drawings" using HTML, Boxart or
+ASCII output, or create an external SVG file and then link it in.
+
+In addition, it is possible to output graphviz code, and when you have
+graphviz (including dot) installed, you can generate PNG files.
+
+=head1 Check the Signature
+
+First you need to check the signature on the package to verify that
+it is untampered and intact. To do this you have to:
+
+=over 2
+
+=item *
+
+Install the Perl module Module::Signature from http://search.cpan.org
+
+=item *
+
+Get my key from http://bloodgate.com/tels.asc, import it into
+GnuPG with:
+
+	gpg --import tels.asc
+
+You may also let the C<cpansign> utility fetch it automatically
+from a keyserver, if that works for you.
+
+=item *
+
+Extract the package to a directory, change there and then:
+
+=item *
+
+Type on a console:
+
+	cpansign --verify
+
+inside the unpacked directory. 
+
+=back
+
+If the last step says "good signature" or "SIGNATURE VERIFIED OK",
+everything is all right.
+
+Note that if you C<cpansign> let GnuPG download my key from a keyserver,
+it might put a C<tels.asc> file in the package directory, and then afterward
+complain that "tels.asc" is not in the MANIFEST:
+
+ Not in MANIFEST: tels.asc
+ ==> MISMATCHED content between MANIFEST and distribution files! <==
+
+You can safely ignore this warning.
+
+B<NOTE:> Please notify me immidiately if the signature
+does not verify. In that case do B<NOT> install this software, your system
+might get compromised!
+
+=head1 Installation
+
+Install the following Perl modules into your system:
+
+	Config-Tiny
+	Graph-Easy
+	Graph-Easy-As_svg	(optional, for SVG output)
+
+You can get these modules from C<http://search.cpan.org/>.
+
+Afterwards, you should be able to run this on any command line:
+
+	perl -MGraph::Easy\ 99
+
+and it should report your installed Graph::Easy version (like v0.34).
+
+	Graph::Easy version 99 required--this is only version 0.34.
+	BEGIN failed--compilation aborted.
+
+If it says something about "Graph::Easy" not being found, you need to
+install it first as root (see above!).
+
+Note: You do NOT need to install Graph::Simple (the former name of
+Graph::Easy), nor Graph (formerly used by Graph::Easy). If they are already
+installed, that will not do any harm, however.
+
+=head2 Installation on a shared host
+
+On a shared host you typically do not have the rights to install Perl
+modules. An easy way around that limitation is to place the modules
+inside a directory called C<lib/> in the C<wiki/graph> directory:
+
+	http_docroot
+		\ - cgi-bin			etc
+		\ - wiki
+			\ - graph
+				\ - lib		<-- here
+			\ - extensions		etc
+
+Untar Graph::Easy, Graph::Easy::As_svg and maybe Config::Tiny into
+this directory so that it looks like that:
+
+	\ - wiki
+		\ - graph
+			\ - lib
+				\ - Graph
+					\ - Easy.pm
+					\ - Layout	etc
+				\ - Config
+					\ - Tiny.pm	etc
+
+=head2 Run the testsuite
+
+If you are on a shared host, skip this step.
+
+Otherwise, after installing the Perl modules from above into the system,
+then run in the directory of this package:
+
+	perl Makefile.PL
+	make test
+
+All tests should pass. If not, please notify me.
+
+=head2 Copy the files
+
+Then place the contents of this mediawiki-graph.tar.gz file so that it
+is a subdirectory named 'graph' of your wiki installation like this:
+
+	http_docroot
+		\ - cgi-bin			etc
+		\ - wiki
+			\ - graph		<-- here
+			\ - math		etc
+
+You need the following files inside C<wiki/graph>:
+
+	graphcnv
+	.htaccess
+	graph.cfg		(there is a .sample file in the distribution)
+
+Make a backup of your wiki directory! I repeat, MAKE A BACKUP! You have been
+warned!
+
+Now copy B<all> the files from the C<extensions/> subdirectory of C<graph> to
+to the extension dir of your wiki, like so:
+
+	http_docroot
+		\ - cgi-bin			etc
+		\ - wiki
+			\ - graph
+				\ - extensions	<-- from here
+			\ - extensions		<-- to here
+
+At present this is only one file, C<Graph.php>.
+
+Then include the following line at the bottom of your C<LocalSettings.php>,
+but before the "?>" line:
+
+	include('extensions/Graph.php');
+
+=head2 Manual test
+
+Change the permissions of graphcnv to be executable:
+
+	chmod a+x graph/graphcnv
+
+Now you should be able to run manually (from your wiki directory):
+
+	./graph/graphcnv '[ Bonn ] -> [ Berlin ]' 'ascii'
+
+and get a pretty ASCII art back on the console.
+
+=head2 Wiki test
+
+Finally you should be able to edit any page of the wiki and insert:
+
+	<graph>
+	[ Bonn ] -> [ Berlin ]
+	</graph>
+
+and hit preview.
+
+If you get an error messages like:
+
+	Error running graphcnv.
+
+make sure that you followed the steps above correctly.
+
+=head1 CONFIGURATION
+
+Inside the C<graph> subdirectory there is a file called C<graph.cfg.sample>.
+If you haven't done already, copy it to C<graph.cfg> like so:
+
+	http_docroot
+		\ - cgi-bin			etc
+		\ - wiki
+			\ - graph
+				graph.cfg.sample	<-- from here
+				graph.cfg		<-- to here
+
+Then edit the C<graph.cfg> file to your match your settings.
+
+For more information please see L<http://bloodgate.com/perl/graph/>
+or send me an email.
+
+=head1 SVG AND PNG OUTPUT
+
+To enable SVG/PNG etc. output, you need to create a directory for the
+files that will be generated for the graphs. (Inlining the SVG code in
+the HTML page directly does not work, since no browser seesm to support
+this properly at this time).
+
+The C<.svg> (or C<.png>) files are written to the output directory
+set in the config file, which defaults to C<./images/graph/>.
+So you need to make sure that this directory exists and is writable by the
+web server process:
+
+	http_docroot
+		\ - cgi-bin			etc
+		\ - wiki
+			\ - images
+				\ - graph	<-- create this directory
+			\ - extensions		etc
+
+You need also make sure that you web server process can write to this
+directory, so you might need to give it the same user/group as the
+process is using, f.i. C<chmod nobody.nogroup images/graph>.
+
+=head2 Caveats
+
+At the moment, each edit of a page containing a graph with SVG or PNG
+output results some of the time in one leaked file in the
+C<images/graph/> directory, e.g. there is a file created which
+is no longer referenced by any article. This happens when you delete
+articles with graphs in them or edit graphs heavily while using
+preview.
+
+To stop the ever growing archive, you could simple delete all files
+and directories in that directory. Afterwards you might need to do
+null-edits on pages containing such diagrams. Although this also
+means you loose graphs embedded into older revisions, so this
+is not really recommended.
+
+I am currently trying to find a way around that leak, or to
+clean up that directory.
+
+=head1 AUTHOR
+
+Copyright (C) 2004 - 2006 by Tels http://bloodgate.com/
+
+Contact: <nospam-abuse@bloodgate.com> (literally :)
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms of the GPL version 2.
+

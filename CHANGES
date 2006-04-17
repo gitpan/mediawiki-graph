@@ -1,0 +1,106 @@
+
+2006-04-17 v0.19 Tels 20 tests
+  * rename to mediawiki-graph
+  * require Graph::Easy 0.44
+  * README
+    + document file-leaking
+    + installation on a shared host
+
+2006-01-28 v0.18 Tels 20 tests
+  * require Graph::Easy 0.40
+  * fix an unquoted bareword in Graph.php (Thanx Mutante!)
+  * fix Makefile.PL to work with newer YAML
+
+2005-12-18 v0.17 Tels 20 tests
+  * require Graph::Easy 0.36
+  * remove all "\n" from returned HTML output, because Mediawiki insists
+    on inserting <p></p> for ever N lines or so, destroying the output
+  * fix typo in graph.cfg.sample
+
+2005-12-10 v0.16 Tels 20 tests
+  * require Graph::Easy 0.35
+  * require Config::Tiny 2.02
+  * add PNG support via dot/neato
+  * add config file support (graph.cfg)
+  * put generated files into sub directories to avoid millions files-per-dir
+  * quote parser error output to prevent HTML accidents
+
+2005-12-04 v0.15 Tels 13 tests
+  * require Graph::Easy 0.34
+  * require Digest::SHA1 2.10
+  * warn on not-installed or outdated As_svg
+  * fix SVG output: create an SVG file in images/graph and embed it
+    via an OBJECT tag. The file name is an SHA1 of $graph->as_txt().
+  * describe cpansign --verify in README better (Thanx Mutante!)
+  * skip right number of tests if Graph::Easy::As_svg is not installed
+    (Thanx Mutante again!)
+  * fix output on Special::Version page (escape $ to \$)
+
+2005-11-06 v0.14 Tels 11 tests
+  * require Graph::Easy 0.32
+  * use utf8:decode() on incoming text, to make non-ASCII input work
+  * remove debug support 
+
+2005-10-30 v0.13 Tels 9 tests
+  * require Graph::Easy 0.31
+  * allow "boxart" as output mode
+  * put STDOUT into ':utf8' mode (for utf-8 output)
+  * do not add spurious linebreak in Special::Version page
+
+2005-09-23 v0.12 Tels 9 tests
+  * require Graph::Easy v0.30
+  * fix SVG output (leading \n and empty lines were garbled by MediaWiki)
+  * avoid double line numbers double line numbers in error messages
+  * support the output-attribute on graphs like in "graph { output: html; }"
+  * include TODO, note that SVG output still garbles the page (but less so)
+
+2005-09-18 v0.11 Tels 7 tests
+  * require Graph::Easy v0.28
+  * remove unnec. "\n" after CSS and HTML code in output, this created
+    ugly empty spaces below and over the graph
+  * propagate error messages back so that the editing user can see them
+
+2005-09-04 v0.10 Tels 7 tests
+  * fix tests to run on Windows
+  * require Graph::Easy v0.27
+  * include version on the special page
+
+2005-07-14 v0.09 Tels 7 tests
+  * include our Credits on Special::Version
+  * require Graph::Easy v0.22
+
+2005-06-25 v0.08 Tels 7 tests
+  * set an ABSTRACT for CPAN
+  * require Graph::Easy v0.20
+  * skip SVG tests if Graph::Easy::As_svg is not installed
+
+2005-06-15 v0.07 Tels 7 tests
+  * use Graph::Easy v0.19 now
+  * support output format SVG
+  * die() on unknown output formats
+
+2005-03-11 v0.06 Tels 5 tests
+  * add (c) note to Graph.php
+  * include CHANGES
+  * require Graph::Simple v0.14
+
+2005-01-25 v0.05 Tels 5 tests
+  * fix the dumb typo in Graph.php
+  * graphcnv: no need to remove spaces from lines - a tad faster now
+
+2005-01-24 v0.04 Tels 5 tests
+  * rewrote as extension
+  * graphcnv: takes no longer unused directory parameters
+
+2005-01-12 v0.03 Tels 5 tests
+  * further cleaning of Graph.php - and pass outputmode to graphcnv
+  * graphcnv: take outputmode and return HTML or ASCII (wrapped in pre)
+  * graphcnv: use Taint mode for security
+
+2005-01-11 v0.02 Tels
+  * fixed patch (relative to ., not wiki, thanx Omega!)
+  * fixed README up a lot (Thanx again, Omega!)
+
+2005-01-07 v0.01 Tels
+  * first try
+

@@ -1,4 +1,13 @@
 
+2006-07-23 v0.20 Tels 20 tests
+  * require Graph::Easy 0.45
+  * require Graph::Easy::As_svg 0.19
+  * various unicode/utf-8 fixes
+  * create files/directories writable for users, that solves the problem when
+    the webserver process running as nobody on a shared host did create files
+    that were only deletable by root (which you aren't on a shared host)
+  * more defensive programming when handling files
+ 
 2006-04-17 v0.19 Tels 20 tests
   * rename to mediawiki-graph
   * require Graph::Easy 0.44

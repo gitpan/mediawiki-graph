@@ -1,13 +1,13 @@
 ---
 name: mediawiki-graph
 abstract: Integrate Graph::Easy into Wikimedia
-version: 0.19
+version: 0.20
 version_from: graphcnv
 license: gpl
 distribution_type: module
-generated_by: mediawiki-graph version 0.19
+generated_by: mediawiki-graph version 0.20
 installdirs: site
 requires:
   Config::Tiny: 2.02
   Digest::SHA1: 2.1
-  Graph::Easy: 0.44
+  Graph::Easy: 0.45

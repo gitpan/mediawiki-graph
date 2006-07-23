@@ -4,16 +4,17 @@ BEGIN
   {
   $|++;				# output buffer off
   unshift @INC, 'lib';		# use local modules first
-  unshift @INC, 'graph/lib';
+  unshift @INC, 'graph/lib'	# use local modules first
   }
 
-$VERSION = '0.19';
+$VERSION = '0.20';
 
 use strict;
 # use warnings;			# be lean
-use Graph::Easy 0.44;
+use Graph::Easy 0.45;
 use Graph::Easy::Parser;
 use Config::Tiny;
+use Encode qw/decode encode/;
 
 # wrong number of options?
 if (@ARGV < 1 || @ARGV > 3)
@@ -51,11 +52,8 @@ eval
   $wiki_prefix =~ /([a-z0-9\/:_-]+)/i; $wiki_prefix = $1;
   $outdir =~ /([a-z0-9\/:_-]+)/i; $outdir = $1;
 
-  my ($txt, $output, $encoding) = @ARGV;
-
-  # We do NOT check the return value, because it will be false for "A", and
-  # true for "köln". (why?)
-  utf8::decode($txt);
+  my ($txt, $encoding, $output) = @ARGV;
+  $txt = decode ($encoding || 'utf8', $txt);
 
   binmode STDOUT, ':utf8' or die ("binmode STDOUT, ':utf8' failed: $!");
 
@@ -113,16 +111,16 @@ eval
     # Different graphs that are equivalent will hash to the same file
     # name, thus saving us space.  
     my $sha1 = Digest::SHA1->new();
-    $sha1->add($graph->as_txt());
+    $sha1->add(encode('utf-8',$graph->as_txt()));
     my $hash = $sha1->hexdigest;
 
     # AF09123... => AF/09/AF09123...
     require File::Spec;
     my $dir = File::Spec->catdir($outdir, substr($hash,0,2));
-    mkdir $dir, 0700 unless -d $dir;
+    mkdir $dir, 0775 unless -d $dir;
 
     $dir = File::Spec->catdir($dir, substr($hash,2,2));
-    mkdir $dir, 0700 unless -d $dir;
+    mkdir $dir, 0775 unless -d $dir;
 
     my $ext = $format; $ext = 'svg' if $output =~ /svg/i;
     my $file = File::Spec->catfile($dir, "$hash.$ext");
@@ -143,11 +141,13 @@ eval
       $w = $max if $w > $max;
       $h = $max if $h > $max;
 
-
-      open FILE, ">$file" or die ("Can't write to '$file': $!##ERROR4##\n");
-      binmode FILE, ':utf8';
-      print FILE $svg;
-      close FILE;
+      {
+        open my $fh, ">$file" or die ("Can't write to '$file': $!##ERROR4##\n");
+        binmode $fh, ':utf8';
+        print $fh $svg;
+        close $fh or die ("Cannot close '$file': $!##ERROR4##\n");
+        chmod 0775, $file;		# in case of webserver running as nobody
+      }
 
       $code = '<object type="image/svg+xml" width="##w##" height="##h##" data="##prefix####file##">' . "\n" .
 		'<b>Your browser does not yet support <a title="Scalable Vector Graphics" href="/wiki/SVG">SVG</a>.</b>' . "\n" .
@@ -163,23 +163,27 @@ eval
       my $gr = $graph->as_graphviz();
 
       # see if we could write the file
-      open FILE, ">$file" or die ("Can't write to '$file': $!##ERROR4##\n");
-      close FILE;
-      unlink $file;
+      {
+        open my $fh, ">$file" or die ("Can't write to '$file': $!##ERROR4##\n");
+        close $fh or die ("Cannot close '$file': $!##ERROR4##\n");
+        unlink $fh;
+      }
 
       # make the ENV safe
       local %ENV = ( path => '/usr/bin:/usr/local/bin:/bin:/' );
 
       my $dot_file = $file; $dot_file =~ s/\.[^\.]+\z/.dot/;
 
-      open FILE, ">$dot_file" or die ("Can't write to temp. '$dot_file' $!##ERROR4##\n");
-      print FILE $gr;
-      close FILE;
+      {
+        open my $fh, ">$dot_file" or die ("Can't write to temp. dot file '$dot_file' $!##ERROR4##\n");
+        binmode $fh, ':utf8';
+        print $fh $gr;
+        close $fh or die ("Cannot close temp. dot file '$dot_file': $!##ERROR4##\n");
+      }
 
       my $cmd = "$dot -T$format -o '$file' -Tcmapx '$dot_file'";
-      
       my $image_map = `$cmd`;
-
+      chmod 0775, $file;		# in case of webserver running as nobody
       # cleanup temp. file
       unlink $dot_file;
 

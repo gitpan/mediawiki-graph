@@ -23,15 +23,15 @@ $cmd = 'perl ' . $cmd if $^O =~ /mswin/;
 my $rc = `$cmd`;
 like ($rc, qr/Usage:/, 'usage instruction');
 
-$rc = `$cmd '[Bonn]->[Berlin]' 'html'`;
+$rc = `$cmd '[Bonn]->[Berlin]' 'utf-8' 'html'`;
 like ($rc, qr/Bonn/, 'render graph');
 like ($rc, qr/<table/, 'render graph as html');
 
-$rc = `$cmd '[Bonn]->[Berlin]' 'ascii' 'utf-8'`;
+$rc = `$cmd '[Bonn]->[Berlin]' 'utf-8' 'ascii'`;
 like ($rc, qr/\| Bonn/, 'render graph as ascii');
 unlike ($rc, qr/<table/, 'render graph not as html');
 
-$rc = `$cmd '[Bonn]->[Berlin]' 'boxart'`;
+$rc = `$cmd '[Bonn]->[Berlin]' 'utf-8' 'boxart'`;
 like ($rc, qr/│ Bonn/, 'render graph as boxart');
 unlike ($rc, qr/<table/, 'render graph not as html');
 
@@ -49,7 +49,7 @@ SKIP:
   $out = File::Spec->catfile('images','graph','4f','03','4f03986d082bb194583e50624debc5208491be5b.svg');
   unlink $out if -f $out; 
  
-  $rc = `$cmd '[Bonn]->[Berlin]' 'svg' 'utf-8'`;
+  $rc = `$cmd '[Bonn]->[Berlin]' 'utf-8' 'svg'`;
   like ($rc, qr/<object/, 'included as object tag');
   like ($rc, qr/<a title=.* href=/, 'included alt text');
   unlike ($rc, qr/^\s/m, 'no leading spaces');
@@ -71,7 +71,7 @@ SKIP:
   $out = File::Spec->catfile('images','graph','4f','03','4f03986d082bb194583e50624debc5208491be5b.png');
   unlink $out if -f $out;
 
-  $rc = `$cmd '[Bonn]->[Berlin]' 'graphviz' 'utf-8'`;
+  $rc = `$cmd '[Bonn]->[Berlin]' 'utf-8' 'graphviz'`;
   like ($rc, qr/<img/, 'included as img tag');
   like ($rc, qr/<img.*?title=.*? src=/, 'included alt text');
   like ($rc, qr/usemap/, 'included usemap');

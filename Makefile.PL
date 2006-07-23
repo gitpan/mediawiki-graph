@@ -43,7 +43,7 @@ if (!defined $ver)
   print "You do not seem to have Graph::Easy::As_svg installed.\n";
   print "         SVG output (without dot) is not possible until you install it afterwards.\n\n";
   }
-elsif ($ver <= 0.17)
+elsif ($ver <= 0.18)
   {
   print "\n************\n";
   print "Warning: Your Graph::Easy::As_svg version is outdated.\n";
@@ -54,7 +54,7 @@ WriteMakefile(
     NAME		=> 'mediawiki-graph',
     VERSION_FROM	=> 'graphcnv',
     PREREQ_PM		=> {
-	'Graph::Easy' => 0.44,
+	'Graph::Easy' => 0.45,
 	'Config::Tiny' => 2.02,
 	'Digest::SHA1' => 2.10,
 	},

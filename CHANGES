@@ -1,4 +1,11 @@
 
+2006-09-19 v0.21 Tels 20 tests
+  * require Graph::Easy 0.48
+  * no longer includes the Graph::Easy version in Special:Version
+    (this got called for every graph parsed/rendered, thus slowing it
+     down - thanx to Florian Lindner for the hint!)
+  * support "debug" output (replaces former Special:Version details)
+
 2006-07-23 v0.20 Tels 20 tests
   * require Graph::Easy 0.45
   * require Graph::Easy::As_svg 0.19

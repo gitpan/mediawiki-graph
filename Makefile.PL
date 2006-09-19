@@ -54,7 +54,7 @@ WriteMakefile(
     NAME		=> 'mediawiki-graph',
     VERSION_FROM	=> 'graphcnv',
     PREREQ_PM		=> {
-	'Graph::Easy' => 0.45,
+	'Graph::Easy' => 0.48,
 	'Config::Tiny' => 2.02,
 	'Digest::SHA1' => 2.10,
 	},

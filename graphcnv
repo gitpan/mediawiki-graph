@@ -7,11 +7,11 @@ BEGIN
   unshift @INC, 'graph/lib'	# use local modules first
   }
 
-$VERSION = '0.20';
+$VERSION = '0.21';
 
 use strict;
 # use warnings;			# be lean
-use Graph::Easy 0.45;
+use Graph::Easy 0.48;
 use Graph::Easy::Parser;
 use Config::Tiny;
 use Encode qw/decode encode/;
@@ -74,7 +74,7 @@ eval
   $output = $graph->attribute('graph', 'output') unless $output;
   # fallback to html output
   $output = 'html' unless $output;
-  die ("Invalid output format '$output'##ERROR3##\n") if $output !~ /^(ascii|boxart|graphviz|html|svg)\z/i;
+  die ("Invalid output format '$output'##ERROR3##\n") if $output !~ /^(ascii|boxart|graphviz|html|svg|debug)\z/i;
 
   if ($output =~ /html/i)
     {
@@ -92,6 +92,10 @@ eval
     $html =~ s/\n+//g;				# remove all newlines
 
     print $css . $html;
+    }
+  elsif ($output =~ /debug/i)
+    {
+    print '<pre>' . $graph->as_debug() . '</pre>';
     }
   elsif ($output =~ /boxart/i)
     {
@@ -227,20 +231,17 @@ graphcnv - convert textual graph description to ASCII/HTML/SVG/PNG
 
 =head1 SYNOPSIS
 
-	perl -T graphcnv graph-as-text [outputtype] [encoding]
+	perl -T graphcnv graph-as-text [encoding] [outputtype]
 
 Examples:
 
-	perl -T graphcnv '[ Bonn ] --> [ Berlin ]' 'ascii'
-	perl -T graphcnv '[Bonn] --> [Berlin]' 'ascii' 'utf-8'
+	perl -T graphcnv '[ Bonn ] --> [ Berlin ]' 'utf-8'
+	perl -T graphcnv '[Bonn] --> [Berlin]' 'utf-8' 'ascii'
 
 =head1 DESCRIPTION
 
 Turns a given textual graph representation into a pretty graph. Uses
 L<Graph::Easy> behind the scenes to do all the hard work.
-
-The C<encoding> parameter is currently ignored, the input is expected
-to be in C<utf-8>.
 
 =head1 VERSIONS
 
